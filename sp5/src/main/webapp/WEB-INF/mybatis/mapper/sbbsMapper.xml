@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sbbs">
+	
+	<sql id="where-list">
+		<choose>
+			<when test="condition == 'all' ">
+			   ( INSTR(subject, #{keyword}) &gt; 0
+		          OR DBMS_LOB.INSTR(content, #{keyword}) &gt; 0 )
+			</when>
+			<when test="condition == 'created' ">
+			   ( TO_CHAR(created, 'YYYYMMDD') = #{keyword}
+		          OR TO_CHAR(created, 'YYYY-MM-DD') = #{keyword} )
+			</when>
+			<when test="condition == 'content'">
+			    DBMS_LOB.INSTR(content, #{keyword}) &gt; 0
+			</when>
+			<otherwise>
+			    INSTR(${condition}, #{keyword}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+			
+	<insert id="insertBoard" parameterType="com.sp.sbbs.Board">
+		INSERT INTO sbbs(num, categoryNum, userId, subject, content)
+		VALUES(sbbs_seq.NEXTVAL, #{categoryNum}, #{userId}, #{subject}, #{content})
+	</insert>
+
+	<select id="listBoard" parameterType="Map" resultType="com.sp.sbbs.Board">
+		SELECT s.num, category, s.categoryNum, userName, subject, hitCount,
+			   TO_CHAR(created, 'YYYY-MM-DD') created, NVL(replyCount, 0) replyCount
+		FROM sbbs s
+		JOIN MEMBER1 m1 ON s.userId = m1.userId
+		LEFT OUTER JOIN (
+   			SELECT num, COUNT(*) replyCount
+    		FROM sbbsReply
+    		GROUP BY num
+		) r ON s.num = r.num
+		LEFT OUTER JOIN sbbsCategory sc ON s.categoryNum = sc.categoryNum 
+		<where>
+			<if test="group!=0">
+				parent = #{group}
+			</if>
+			<if test="keyword!=null and keyword!=''">
+				AND <include refid="where-list"/>		
+			</if>
+		</where>
+		ORDER BY num DESC
+		OFFSET ${offset} ROWS FETCH FIRST ${rows} ROWS ONLY
+	</select>
+
+	<select id="dataCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*) FROM sbbs s
+		LEFT OUTER JOIN sbbsCategory sc ON s.categoryNum = sc.categoryNum
+		<where>
+			<if test="group!=0">
+				parent = #{group}
+			</if>
+			<if test="keyword!=null and keyword!=''">
+				AND <include refid="where-list"/>
+			</if>
+		</where>
+	</select>
+
+
+	
+	<select id="listCategory" parameterType="map" resultType="com.sp.sbbs.Board">
+		SELECT categoryNum, category, parent FROM sbbsCategory
+		<where>
+			<if test="level=='group'">
+				parent IS null
+			</if>
+			<if test="level=='sub'">
+				parent=#{parent}
+			</if>
+		</where>
+			ORDER BY categoryNum
+	</select>
+
+	<select id="readBoard" parameterType="Integer" resultType="com.sp.sbbs.Board">
+		SELECT num, s.userId, userName, subject, content, hitCount, TO_CHAR(created, 'YYYY-MM-DD HH24:MI:SS') created,
+			   sc1.category, sc1.categoryNum, sc2.categoryNum groupCategoryNum ,sc2.category groupCategory FROM sbbs s
+		JOIN member1 m1 ON s.userId = m1.userId
+		JOIN sbbsCategory sc1 ON s.categoryNum = sc1.categoryNum
+		JOIN sbbsCategory sc2 ON sc1.parent = sc2.categoryNum
+		WHERE num = #{num}
+	</select>
+
+	<update id="updateHitCount" parameterType="Integer">
+	UPDATE sbbs SET hitCount = hitCount + 1 WHERE num = #{num}
+	
+	</update>
+
+	<select id="preReadBoard" parameterType="Map" resultType="com.sp.sbbs.Board">
+		SELECT num, subject FROM sbbs s 
+		LEFT OUTER JOIN sbbsCategory sc ON s.categoryNum = sc.categoryNum
+		<where>
+			num &lt; #{num}
+			<if test="group!=0">
+				AND parent = #{group}
+			</if>
+			<if test="keyword!=null and keyword!=''">
+				AND <include refid="where-list"/>
+			</if>
+		</where>		
+		ORDER BY num DESC 
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+
+	<select id="nextReadBoard" parameterType="Map" resultType="com.sp.sbbs.Board">
+		SELECT num, subject FROM sbbs s 
+		LEFT OUTER JOIN sbbsCategory sc ON s.categoryNum = sc.categoryNum
+		<where>
+			num &gt; #{num}
+			<if test="group!=0">
+				AND parent = #{group}
+			</if>
+			<if test="keyword!=null and keyword!=''">
+				AND <include refid="where-list"/>
+			</if>
+		</where>		
+		ORDER BY num ASC 
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+
+	<update id="updateBoard" parameterType="com.sp.sbbs.Board">
+		UPDATE sbbs SET subject = #{subject}, categoryNum = #{categoryNum}, content = #{content}
+		WHERE num = #{num}
+	</update>
+
+
+</mapper>

@@ -10,25 +10,25 @@ import com.sp.common.FileManager;
 import com.sp.common.dao.CommonDAO;
 
 @Service("bbs.boardService")
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl implements BoardService {
 	@Autowired
-	private CommonDAO  dao;
-	
+	private CommonDAO dao;
+
 	@Autowired
 	private FileManager fileManager;
-	
+
 	@Override
-	public void insertBoard(Board dto, String pathname) throws Exception{
-		try{
-			
-			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
-			if(saveFilename!=null) {
+	public void insertBoard(Board dto, String pathname) throws Exception {
+		try {
+
+			String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathname);
+			if (saveFilename != null) {
 				dto.setSaveFilename(saveFilename);
 				dto.setOriginalFilename(dto.getUpload().getOriginalFilename());
 			}
-			
+
 			dao.insertData("bbs.insertBoard", dto);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
@@ -36,113 +36,113 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public List<Board> listBoard(Map<String, Object> map) {
-		List<Board> list=null;
-		
-		try{
-			list=dao.selectList("bbs.listBoard", map);
-		} catch(Exception e) {
+		List<Board> list = null;
+
+		try {
+			list = dao.selectList("bbs.listBoard", map);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return list;
 	}
 
 	@Override
 	public int dataCount(Map<String, Object> map) {
-		int result=0;
-		
-		try{
-			result=dao.selectOne("bbs.dataCount", map);			
-		} catch(Exception e) {
+		int result = 0;
+
+		try {
+			result = dao.selectOne("bbs.dataCount", map);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 
 	@Override
 	public Board readBoard(int num) {
-		Board dto=null;
-		
-		try{
+		Board dto = null;
+
+		try {
 			// 게시물 가져오기
-			dto=dao.selectOne("bbs.readBoard", num);
-		} catch(Exception e) {
+			dto = dao.selectOne("bbs.readBoard", num);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return dto;
 	}
 
 	@Override
 	public void updateHitCount(int num) throws Exception {
-		try{
+		try {
 			// 조회수 증가
 			dao.updateData("bbs.updateHitCount", num);
-			
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
-	
+
 	@Override
 	public Board preReadBoard(Map<String, Object> map) {
-		Board dto=null;
-		
-		try{
-			dto=dao.selectOne("bbs.preReadBoard", map);
-		} catch(Exception e) {
+		Board dto = null;
+
+		try {
+			dto = dao.selectOne("bbs.preReadBoard", map);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return dto;
 
 	}
 
 	@Override
 	public Board nextReadBoard(Map<String, Object> map) {
-		Board dto=null;
-		
-		try{
-			dto=dao.selectOne("bbs.nextReadBoard", map);
-		} catch(Exception e) {
+		Board dto = null;
+
+		try {
+			dto = dao.selectOne("bbs.nextReadBoard", map);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return dto;
 	}
-	
+
 	@Override
-	public void updateBoard(Board dto, String pathname) throws Exception{
-		try{
-			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
-			if(saveFilename != null) {
-				if(dto.getSaveFilename()!=null && dto.getSaveFilename().length()!=0)
+	public void updateBoard(Board dto, String pathname) throws Exception {
+		try {
+			String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathname);
+			if (saveFilename != null) {
+				if (dto.getSaveFilename() != null && dto.getSaveFilename().length() != 0)
 					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
-				
+
 				dto.setSaveFilename(saveFilename);
 				dto.setOriginalFilename(dto.getUpload().getOriginalFilename());
 			}
-			
+
 			dao.updateData("bbs.updateBoard", dto);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
 	@Override
-	public void deleteBoard(int num, String pathname, String userId) throws Exception{
-		try{
-			Board dto=readBoard(num);
-			if(dto==null || (! userId.equals("admin") && ! userId.equals(dto.getUserId())))
+	public void deleteBoard(int num, String pathname, String userId) throws Exception {
+		try {
+			Board dto = readBoard(num);
+			if (dto == null || (!userId.equals("admin") && !userId.equals(dto.getUserId())))
 				return;
-			
+
 			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
-			
+
 			dao.deleteData("bbs.deleteBoard", num);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
@@ -160,9 +160,9 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public List<Reply> listReply(Map<String, Object> map) {
-		List<Reply> list=null;
+		List<Reply> list = null;
 		try {
-			list=dao.selectList("bbs.listReply", map);
+			list = dao.selectList("bbs.listReply", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -171,9 +171,9 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int replyCount(Map<String, Object> map) {
-		int result=0;
+		int result = 0;
 		try {
-			result=dao.selectOne("bbs.replyCount", map);
+			result = dao.selectOne("bbs.replyCount", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -181,7 +181,7 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public void deleteReply(Map<String, Object> map) throws Exception{
+	public void deleteReply(Map<String, Object> map) throws Exception {
 		try {
 			dao.deleteData("bbs.deleteReply", map);
 		} catch (Exception e) {
@@ -192,9 +192,9 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public List<Reply> listReplyAnswer(int answer) {
-		List<Reply> list=null;
+		List<Reply> list = null;
 		try {
-			list=dao.selectList("bbs.listReplyAnswer", answer);
+			list = dao.selectList("bbs.listReplyAnswer", answer);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -203,9 +203,9 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int replyAnswerCount(int answer) {
-		int result=0;
+		int result = 0;
 		try {
-			result=dao.selectOne("bbs.replyAnswerCount", answer);
+			result = dao.selectOne("bbs.replyAnswerCount", answer);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -213,7 +213,7 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public void insertReplyLike(Map<String, Object> map) throws Exception{
+	public void insertReplyLike(Map<String, Object> map) throws Exception {
 		try {
 			dao.insertData("bbs.insertReplyLike", map);
 		} catch (Exception e) {
@@ -224,9 +224,9 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public Map<String, Object> replyLikeCount(Map<String, Object> map) {
-		Map<String, Object> countMap=null;
+		Map<String, Object> countMap = null;
 		try {
-			countMap=dao.selectOne("bbs.replyLikeCount", map);
+			countMap = dao.selectOne("bbs.replyLikeCount", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -234,7 +234,7 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public void insertBoardLike(Map<String, Object> map) throws Exception{
+	public void insertBoardLike(Map<String, Object> map) throws Exception {
 		try {
 			dao.insertData("bbs.insertBoardLike", map);
 		} catch (Exception e) {
@@ -245,9 +245,9 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int boardLikeCount(int num) {
-		int result=0;
+		int result = 0;
 		try {
-			result=dao.selectOne("bbs.boardLikeCount", num);
+			result = dao.selectOne("bbs.boardLikeCount", num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

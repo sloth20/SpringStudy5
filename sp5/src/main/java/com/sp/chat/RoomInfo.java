@@ -3,7 +3,7 @@ package com.sp.chat;
 import java.util.HashSet;
 import java.util.Set;
 
-public class RoomInfo { 
+public class RoomInfo {
 	private String subject;          // 방제목
 	private String nickName;      // 개설자 닉네임
 	private int maximum;          // 최대 인원수

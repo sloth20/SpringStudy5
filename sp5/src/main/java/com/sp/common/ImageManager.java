@@ -8,7 +8,7 @@ import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
 
 import org.springframework.stereotype.Service;
- 
+
 @Service("imageManager")
 public class ImageManager {
 	/**

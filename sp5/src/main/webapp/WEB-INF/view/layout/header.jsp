@@ -66,6 +66,7 @@
                 <li><a href="#">프로그래밍</a></li>
                 <li><a href="#">데이터베이스</a></li>
                 <li><a href="#">웹</a></li>
+                <li><a href="${pageContext.request.contextPath}/sbbs/list">질문과 답변</a></li>
                 <li><a href="${pageContext.request.contextPath}/scheduler/main">스케쥴러</a></li>
             </ul>
         </li>

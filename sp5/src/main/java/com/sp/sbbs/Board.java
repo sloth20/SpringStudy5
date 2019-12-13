@@ -1,18 +1,17 @@
-package com.sp.bbs;
-
-import org.springframework.web.multipart.MultipartFile;
+package com.sp.sbbs;
 
 public class Board {
 	private int num, listNum;
-	private String userName, userId, subject, content, created;
+	private String userName, userId;
+	private String subject, content;
+	private String created;
 	private int hitCount;
 
-	private String saveFilename;
-	private String originalFilename;
-	private MultipartFile upload; // <input type='file' name='upload' ..
+	private int groupCategoryNum, categoryNum;
+	private String groupCategory, category;
+	private int parent;
 
 	private int replyCount;
-	private int boardLikeCount;
 
 	public int getNum() {
 		return num;
@@ -78,28 +77,44 @@ public class Board {
 		this.hitCount = hitCount;
 	}
 
-	public String getSaveFilename() {
-		return saveFilename;
+	public int getGroupCategoryNum() {
+		return groupCategoryNum;
 	}
 
-	public void setSaveFilename(String saveFilename) {
-		this.saveFilename = saveFilename;
+	public void setGroupCategoryNum(int groupCategoryNum) {
+		this.groupCategoryNum = groupCategoryNum;
 	}
 
-	public String getOriginalFilename() {
-		return originalFilename;
+	public int getCategoryNum() {
+		return categoryNum;
 	}
 
-	public void setOriginalFilename(String originalFilename) {
-		this.originalFilename = originalFilename;
+	public void setCategoryNum(int categoryNum) {
+		this.categoryNum = categoryNum;
 	}
 
-	public MultipartFile getUpload() {
-		return upload;
+	public String getGroupCategory() {
+		return groupCategory;
 	}
 
-	public void setUpload(MultipartFile upload) {
-		this.upload = upload;
+	public void setGroupCategory(String groupCategory) {
+		this.groupCategory = groupCategory;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public int getParent() {
+		return parent;
+	}
+
+	public void setParent(int parent) {
+		this.parent = parent;
 	}
 
 	public int getReplyCount() {
@@ -108,13 +123,5 @@ public class Board {
 
 	public void setReplyCount(int replyCount) {
 		this.replyCount = replyCount;
-	}
-
-	public int getBoardLikeCount() {
-		return boardLikeCount;
-	}
-
-	public void setBoardLikeCount(int boardLikeCount) {
-		this.boardLikeCount = boardLikeCount;
 	}
 }

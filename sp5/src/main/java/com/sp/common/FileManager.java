@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service("fileManager") 
+@Service("fileManager")
 public class FileManager {
 	/**
 	 * 파일을 업로드 하기 위한 메소드

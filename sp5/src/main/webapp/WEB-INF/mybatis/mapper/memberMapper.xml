@@ -88,9 +88,14 @@
     <delete id="deleteMember1" parameterType="String">
     	DELETE FROM member1 WHERE userId=#{userId}
     </delete>
-    
+    	
     <delete id="deleteMember2" parameterType="String">
     	DELETE FROM member2 WHERE userId=#{userId}
     </delete>
+	
+	<!-- 권한 저장 -->
+	<insert id="insertAuthority" parameterType="com.sp.member.Member">
+		INSERT INTO memberAuthority(userId,authority) VALUES(#{userId}, #{authority})
+	</insert>
 	
 </mapper>
