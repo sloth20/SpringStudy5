@@ -173,7 +173,7 @@ $(function(){
 		}
 		
 		if(! check()) {
-			return;
+			return false;
 		}
 		
 		var query=$("form[name=scheduleForm]").serialize();

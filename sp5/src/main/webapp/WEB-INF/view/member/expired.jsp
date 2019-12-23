@@ -11,12 +11,12 @@
 
     <div style="margin: 0px auto; padding-top:90px; width:420px;">
     	<div style="text-align: center;">
-        	<span style="font-weight: bold; font-size:27px; color: #424951;"><strong>경고 !</strong></span>
+        	<span style="font-weight: bold; font-size:27px; color: #424951;"><strong>확인 !</strong></span>
         </div>
         
         <div class="messageBox">
             <div style="line-height: 150%; padding-top: 35px;">
-                   세션이 만료되었습니다.
+                    세션이 만료 되었습니다.
             </div>
             <div style="margin-top: 20px;">
                      <button type="button" onclick="javascript:location.href='<%=cp%>/';" class="btnConfirm">메인화면으로 이동</button>

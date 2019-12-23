@@ -47,8 +47,8 @@ public class MemberServiceImpl implements MemberService {
 			// dao.insertData("member.insertMember1", dto);
 			// dao.insertData("member.insertMember2", dto);
 			dao.updateData("member.insertMember12", dto); // member1, member2 테이블 동시에 
-		
-			// 권한 저장
+			
+			// 권한저장
 			dto.setAuthority("ROLE_USER");
 			dao.insertData("member.insertAuthority", dto);
 		} catch (Exception e) {
@@ -117,7 +117,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void updateMembership(Map<String, Object> map) throws Exception {
 		try {
-			dao.updateData("member.updateMembershep", map);
+			dao.updateData("member.updateMembership", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -135,7 +135,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
-	public void updateMember(Member dto) throws Exception {
+	public void updateMember(Member dto, boolean bPwdUpdate) throws Exception {
 		try {
 			if(dto.getEmail1() != null && dto.getEmail1().length()!=0 &&
 					dto.getEmail2() != null && dto.getEmail2().length()!=0)
@@ -146,7 +146,10 @@ public class MemberServiceImpl implements MemberService {
 							dto.getTel3() != null && dto.getTel3().length()!=0)
 				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
 			
-			dao.updateData("member.updateMember1", dto);
+			if(bPwdUpdate) {
+				// 패스워드가 변경된 경우만 패스워드 변경
+				dao.updateData("member.updateMember1", dto);
+			}
 			dao.updateData("member.updateMember2", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -155,9 +158,19 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public void updatePwd(Member dto) throws Exception {
+		try {
+			dao.updateData("member.updateMember1", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	@Override
 	public void deleteMember(Map<String, Object> map) throws Exception {
 		try {
-			map.put("membershep", 0);
+			map.put("membership", 0);
 			updateMembership(map);
 			
 			dao.deleteData("member.deleteMember2", map);
@@ -171,15 +184,119 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int dataCount(Map<String, Object> map) {
 		int result=0;
-
+		try {
+			result=dao.selectOne("member.dataCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 
 	@Override
 	public List<Member> listMember(Map<String, Object> map) {
 		List<Member> list=null;
-
+		try {
+			list=dao.selectList("member.listMember", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return list;
 	}
 
+	@Override
+	public void updateAuthority(Map<String, Object> map) throws Exception {
+		try {
+			dao.updateData("member.updateAuthority", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public List<Member> listAuthority(String userId) {
+		List<Member> list=null;
+		try {
+			list=dao.selectList("member.listAuthority", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int checkFailureCount(String userId) {
+		int result = 0;
+		try {
+			result = dao.selectOne("member.checkFailureCount", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public void updateFailureCount(String userId) throws Exception {
+		try {
+			dao.updateData("member.updateFailureCount", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public void updateFailureCountReset(String userId) throws Exception {
+		try {
+			dao.updateData("member.updateFailureCountReset", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	@Override
+	public void updateMemberEnabled(Map<String, Object> map) throws Exception {
+		try {
+			dao.updateData("member.updateMemberEnabled", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public void insertMemberState(Member dto) throws Exception {
+		try {
+			dao.updateData("member.insertMemberState", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public List<Member> listMemberState(String userId) {
+		List<Member> list=null;
+		try {
+			list=dao.selectList("member.listMemberState", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public Member readMemberState(String userId) {
+		Member dto=null;
+		
+		try {
+			dto=dao.selectOne("member.readMemberState", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
 }

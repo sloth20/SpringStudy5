@@ -160,7 +160,8 @@ public class BoardController {
 		if(dto==null)
 			return "redirect:/bbs/list?"+query;
 		
-        dto.setContent(myUtil.htmlSymbols(dto.getContent()));
+		// 스마트 에디터에서는 주석 처리
+        // dto.setContent(myUtil.htmlSymbols(dto.getContent()));
         
 		// 이전 글, 다음 글
 		Map<String, Object> map = new HashMap<String, Object>();

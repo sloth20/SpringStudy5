@@ -33,7 +33,7 @@ $(function(){
         <div style="padding-top: 20px;  float: right;">
                <span style="color:blue;">${sessionScope.member.userName}</span>님
                 &nbsp;|&nbsp;
-               <a href="<%=cp%>/">로그아웃</a>
+               <a href="<%=cp%>/member/logout">로그아웃</a>
                 &nbsp;|&nbsp;
                <a href="<%=cp%>/">정보수정</a>
         </div>
@@ -43,7 +43,7 @@ $(function(){
 <div class="menu">
     <ul class="nav">
         <li><a href="<%=cp%>/admin">Home</a></li>
-        <li><a href="#">회원관리</a></li>
+        <li><a href="<%=cp%>/admin/memberManage/list">회원관리</a></li>
         <li><a href="#">커뮤니티관리</a></li>
         <li><a href="#">스터디관리</a></li>
         <li><a href="#">고객센터관리</a></li>

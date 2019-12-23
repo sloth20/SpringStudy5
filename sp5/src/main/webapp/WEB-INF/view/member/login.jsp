@@ -56,13 +56,13 @@ function sendLogin() {
 </script>
 
 <div class="body-container">
-    <div style="width:360px; margin: 0px auto; padding-top:90px;">
+    <div style="margin: 0px auto; padding-top:90px; width:360px;">
     	<div style="text-align: center;">
         	<span style="font-weight: bold; font-size:27px; color: #424951;">회원 로그인</span>
         </div>
         
 		<form name="loginForm" method="post" action="">
-		  <table style="margin: 15px auto; width: 100%; border-spacing: 0px;">
+		  <table style="margin: 15px auto; width: 360px; border-spacing: 0px;">
 		  <tr align="center" height="60"> 
 		      <td> 
                 <label for="userId" id="lblUserId" class="lbl" >아이디</label>
@@ -96,7 +96,7 @@ function sendLogin() {
 		  </tr>
 		  
 		  <tr align="center" height="40" >
-		    	<td><span style="color: blue;">${message}</span></td>
+		    	<td><span style="color: blue;">${errorMsg}</span></td>
 		  </tr>
 		  
 		  </table>
