@@ -31,7 +31,7 @@ public class MySocketHandler extends TextWebSocketHandler {
 	
 	// 채팅방에 대한 정보(개설아이디, 채팅방정보)
 	private Map<String, RoomInfo> roomMap = new Hashtable<>();
-
+ 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		super.afterConnectionClosed(session, status);

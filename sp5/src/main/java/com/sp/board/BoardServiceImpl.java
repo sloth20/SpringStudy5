@@ -17,7 +17,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void insertBoard(Board dto, String mode) throws Exception {
 		try {
-			
+			 
 			int seq=dao.selectOne("board.seq");
 			
 			if(mode.equals("created")) { // 새글등록시

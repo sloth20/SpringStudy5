@@ -120,7 +120,7 @@ public class BoardController {
 		model.addAttribute("mode", "created");
 		return ".board.created";
 	}
-	
+	 
 	@RequestMapping(value="/board/created", method=RequestMethod.POST)
 	public String createdSubmit(Board dto, HttpSession session) throws Exception{
 		SessionInfo info=(SessionInfo)session.getAttribute("member");

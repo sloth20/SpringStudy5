@@ -21,7 +21,7 @@ public class ImageManager {
 	 */
 	public int getImageWidth(String pathname) {
 		int width=-1;
-		
+		 
 		File file = new File(pathname);
 		if (! file.exists())
 			return width;
